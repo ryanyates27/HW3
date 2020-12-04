@@ -277,6 +277,10 @@ class PolynomialTest {
         for(int i = 0; i < original.getNumTerms(); i++) {
             originalTerm = original.getTerm(i);
             copyTerm = copy.getTerm(i);
+            
+            System.out.println(originalTerm);
+            System.out.println(copyTerm);
+            
 
             assertTrue("Shallow copy of Term object in Polynomial", originalTerm != copyTerm);
 

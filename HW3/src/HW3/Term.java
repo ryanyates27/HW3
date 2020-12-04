@@ -1,242 +1,246 @@
 package HW3;
 
-public class Term implements Comparable<Term>, Cloneable {
-	
-	private int coefficient;
-	private int exponent;
-	public Object polynomial;
-	
-	public Term() 
+public class Term implements Comparable, Cloneable
+{
+ int coef;
+ int exp;
+ 
+ public Term()
+ {
+	 coef = 1;
+	 exp = 1;
+ }
+ 
+ public Term(int coefficient, int exponent)
+ {
+	 coef = coefficient;
+	 exp = exponent;
+ }
+ 
+ public Term(Term term)
+ {
+	 coef = term.getCoefficient();
+	 exp = term.getExponent();
+ }
+ 
+ public Term(String t)
+ {
+	 int carrotIndex;
+	 int xIndex;
+	 
+	String[] splitString = t.split("x");
+	if(splitString.length <= 0)
 	{
-		this.coefficient = 0;
-		this.exponent = 0;
+		coef = 0;
+		exp = 0;
 	}
-	
-	public Term(int coeff, int exp) 
+	if(splitString.length >= 1)
 	{
-		this.coefficient = coeff;
-		this.exponent = exp;
-	}
-	
-	public Term(String stringTerm) 
-	{
-		
-		if(stringTerm.equals("x") || stringTerm.equals("+x")) 
+		if(splitString[0].length() == 1)
 		{
-			this.coefficient = 1;
-			this.exponent = 1;
-		} 
-		
-		else if(stringTerm.equals("-x")) 
+			coef = (splitString[0] == "+") ? 1: -1; //? is just another way of saying if else. (coef = 1, coef = -1)
+		}
+		else
 		{
-			this.coefficient = -1;
-			this.exponent = 1;
-		} 
-		
-		else if(stringTerm.contains("x") && !stringTerm.contains("x^"))
-		{
-				String coef = stringTerm.replaceAll("[x]", "");
-				this.coefficient = Integer.parseInt(coef);
-				this.exponent = 1;
-		} 
-		
-		else if (stringTerm.contains("x^")) 
-		{
-				String[] inputString = stringTerm.split("\\^");
-				String coef = inputString[0];
-			
-				if(coef.equals("x")) 
-				{
-					this.coefficient = 1;
-				} 
-				
-				else 
-				{
-					this.coefficient = Integer.parseInt(coef.replaceAll("[x]", ""));
-				}
-			
-				this.exponent = Integer.parseInt(inputString[1]);
-		} 
-		
-		else 
-		{
-				this.coefficient = Integer.parseInt(stringTerm);
+			coef = Integer.parseInt(splitString[0]);
 		}
 	}
-	
-	
-	public Term(Term term) 
+	if(splitString.length == 2)
 	{
-		this.coefficient = term.getCoefficient();
-		this.exponent = term.getExponent();
+		exp = Integer.parseInt(splitString[1].substring(1));
+	}
+	else
+	{
+		exp = 0;
 	}
 	
+//	System.out.println(coef);
+//	System.out.println(exp);
 	
-	public Term plus(Term other) 
-	{
-		Term sumTerm = new Term();
-		
-		if(other.getExponent() == this.exponent) 
-		{
-			sumTerm.setCoefficient(other.getCoefficient() + this.coefficient);
-			sumTerm.setExponent(this.exponent);
-		} 
-		
-		else 
-		{
-			System.out.println("Cannot add Terms with different exponents");
-		}
-		
-		return sumTerm;
-	}
-	
-	public Term sumOf(Term A, Term B) 
-	{
-		Term sumTerm = new Term();
-		
-		if(A.getExponent() == B.getExponent()) 
-		{
-			sumTerm.setCoefficient(A.getCoefficient() + B.getCoefficient());
-			sumTerm.setExponent(A.getExponent());
-		} 
-		
-		else 
-		{
-			System.out.println("Cannot add Terms with different exponents");
-		}
-		
-		return sumTerm;
-	}
-	
-	public int getCoefficient() 
-	{
-		return coefficient;
-	}
-	
-	public void setCoefficient(int coefficient) 
-	{
-		this.coefficient = coefficient;
-	}
-	
-	public int getExponent() 
-	{
-		return exponent;
-	}
-	
-	public void setExponent(int exponent) 
-	{
-		this.exponent = exponent;
-	}
-	
-	public void setAll(int coeff, int exp) 
-	{
-		this.coefficient = coeff;
-		this.exponent = exp;
-	}
-	
-	
-	@Override
-	public int compareTo(Term term) 
-	{
-		
-		int compareResult;
-		
-		if(this.exponent < term.getExponent()) 
-		{
-			compareResult = -1;
-		} 
-		
-		else if (this.exponent > term.getExponent()) 
-		{
-			compareResult = 1;
-		} 
-		
-		else 
-		{
-			compareResult = 0;
-		}
-		
-		return compareResult;
-	}
-	
-	@Override
-    public boolean equals(Object obj) {
-        if (obj == null) 
-        {
-            return false;
-        }
-        if (obj.getClass() != this.getClass()) 
-        {
-            return false;
-        }
-        
-        final Term that = (Term) obj;
-        
-        if (this.exponent != that.getExponent()) 
-        {
-            return false;
-        }
-        
-        if (this.coefficient != that.getCoefficient()) 
-        {
-            return false;
-        }
-        return true;
-    }
-    
-	@Override 
-	protected Object clone() throws CloneNotSupportedException 
-	{
-	    return super.clone();
-	}
-	
-	@Override
-	public String toString() 
-	{
-		
-		String result;
-		if(this.coefficient == 0) 
-		{
-			result = "";	
-		} 
-		
-		else if(this.exponent == 1 && this.coefficient == 1) 
-		{
-			result = "x";		
-		} 
-		
-		else if(this.exponent == 1 && this.coefficient == -1) 
-		{
-			result = "-" + "x";
-		} 
-		
-		else if (this.exponent == 0 && this.coefficient > 0) 
-		{
-			result = this.coefficient + "";
-		} 
-		
-		else if (this.exponent == 0 && this.coefficient < 0) 
-		{
-			result = this.coefficient + "";	
-		} 
-		
-		else if(this.exponent == 1 && this.coefficient > 0) 
-		{
-			result = this.coefficient + "x";
-		} 
-		
-		else if(this.exponent == 1 && this.coefficient < 0) 
-		{
-			result = this.coefficient + "x";		
-		} 
-		
-		else 
-		{
-			result = this.coefficient + "x^" + this.exponent;
-		}
-		
-		return result;
-	}
-	
+//	 carrotIndex = t.indexOf("^");;
+//	 xIndex = t.indexOf("x");
+//	
+//	int coefficient = 0;
+//	int exponent = 0;
+//	
+//	Integer convert;
+//	Integer convert2;
+//	
+//	for(int i = 0; i < splitString.length; i++)
+//	{
+//		
+//	convert2 = Integer.parseInt(splitString[i]);
+//	
+//	coefficient = convert;
+//	exponent = convert2;
+//	}
+//	
+//	coef = coefficient;
+//	exp = exponent;
+	 
+// 	Integer convert = Integer.parseInt();
+//	Integer convert2 = Integer.parseInt(t);
+//	System.out.println(convert);
+//	System.out.println(convert2);
+//	coef = convert;
+//	exp = convert2;
+ }
+ 
+ public int getCoefficient()
+ {
+	 return coef;
+ }
+ 
+ public void setCoefficient(int coefficient)
+ {
+	 coef = coefficient;
+ }
+ 
+ public int getExponent()
+ {
+	 return exp;
+ }
+ 
+ public void setExponent(int exponent)
+ {
+	 exp = exponent;
+ }
+ 
+ public void setAll(int coefficient, int exponent)
+ {
+	 coef = coefficient;
+	 exp = exponent;
+ }
+ 
+ public boolean equals(Object o)
+ {
+	 if(o == null || !(o instanceof Term))
+	 {
+		 return false;
+	 }
+	 else
+	 {
+		 Term t = (Term) o;
+		 return this.coef == t.coef && this.exp == t.exp;	 
+	 }
+ }
+ 
+ public Term clone() //Changed the class
+ {
+	 Term cloneTerm = new Term(this.coef, this.exp);
+	 return cloneTerm;
+ }
+ 
 
+public int compareTo(Term t) 
+{
+	// TODO Auto-generated method stub
+	if(t.getExponent() == exp)
+	{
+		return 0;
+	}
+	else if(t.getExponent() > exp)
+	{
+		return -1;
+	}
+	
+	return 1;
+}
+
+@Override
+public int compareTo(Object o) {
+	// TODO Auto-generated method stub
+	return 0;
+}
+
+public String toString()
+{
+	String var;
+	
+	if(coef == 0) // if coef is 0 then ""
+	{
+		return "";
+	}
+	else if(coef == 5 && exp == 0)
+	{
+		return "+" + coef;
+	}
+	else if(coef == 25 && exp < -1)
+	{
+		return "+" + coef + "x^" + exp;
+	}
+	else if(coef < -25 && exp < -1)
+	{
+		return coef + "x^" + exp;
+	}
+	else if(coef == 1 && exp == 1)
+	{
+		return "+x"; 
+	}
+	else if(coef == -1 && exp == 1)
+	{
+		return "-x";
+	}
+	else if(coef < -1 && exp == 1)
+	{
+		return coef + "x";
+	}
+	else if(coef == 1 && exp > 1)
+	{
+		return "+x^" + exp;  
+	}
+	else if(coef == -1 && exp > 1)
+	{
+		return "-x^" + exp;  
+	}
+	else if(coef == 1 && exp < -1)
+	{
+		return "+x^" + exp;  
+	}
+	else if(coef == -1 && exp < -1)
+	{
+		return "-x^" + exp;  
+	}
+	else if(coef > 3 && exp > 3)
+	{
+		return "+" + coef + "x^" + exp;
+	}
+	else if(coef == -2 && exp > 10)
+	{
+		return coef + "x^" + exp;
+	}
+	else if(coef > 0 && exp != 0) //if coef is greater than 0 and has exponent
+	{
+	return "+" + coef + "^" + exp;
+	}
+	
+	else if(coef > 0 && exp == 0) //if coef is greater than 0 and has no exponent
+	{
+		return "+" + coef;
+	}
+	
+	else if(coef < 0 && exp == 0) //if coef is less than 0 and has no exp
+	{
+		return coef + "";
+	}
+	
+	else if(coef == -1 && exp == 0)
+	{
+		return "-x";
+	}
+	else if(coef == -1 && exp != 0)
+	{
+		return "-x" + exp;
+	}
+	
+	else //return negative coef and exp
+	{
+		return coef + "^" + exp;
+	}
+}
+ 
+ 
+ 
+ 
+	
 }

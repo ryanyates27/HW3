@@ -132,6 +132,8 @@ class TermTest {
             c = COEFFICIENTS[i];
             e = EXPONENTS[i];
             t = TERMS[i];
+            
+            System.out.println(i);
 
             test = new Term(t);
 
@@ -174,20 +176,17 @@ class TermTest {
     }
    
     @Test  // Had to put this test in try/catch for it to work
-    public void testClone() { 
+    public void testClone() throws CloneNotSupportedException //CHANGED TO THROW BECAUSE CLASS WASNT WORKING 
+    { 
         Term original = new Term(10, -5);
         Term copy;
-		try {
-			copy = (Term)original.clone();
-	        assertEquals("Coefficients in 'copy' does not match 'original'",
-	                original.getCoefficient(), copy.getCoefficient());
-	        assertEquals("Exponents in 'copy' does not match 'original'",
-	                original.getExponent(), copy.getExponent());
-	        assertTrue("Reference is not a unique memory address (shallow copy)",
-	                original != copy);
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		copy = (Term)original.clone();
+		assertEquals("Coefficients in 'copy' does not match 'original'",
+		        original.getCoefficient(), copy.getCoefficient());
+		assertEquals("Exponents in 'copy' does not match 'original'",
+		        original.getExponent(), copy.getExponent());
+		assertTrue("Reference is not a unique memory address (shallow copy)",
+		        original != copy);
     }
     
 	@Test
@@ -195,20 +194,25 @@ class TermTest {
         Term original = new Term(1, COMPARE_TO_VALUE), test;
         int e, compareResult;
 
-        for(int i = 0; i < EXPONENTS.length; i++) {
+        for(int i = 0; i < EXPONENTS.length; i++) 
+        {
             e = EXPONENTS[i];
 
             test = new Term(1, e);
             compareResult = original.compareTo(test);
 
-            if( COMPARE_TO_VALUES[i] == ORIGINAL_EQUALS_TEST) {
+            if( COMPARE_TO_VALUES[i] == ORIGINAL_EQUALS_TEST) 
+            {
                 assertEquals("Expected and actual compareTo result (original exponent EQUALS test exponent) DON'T match",
                         0, compareResult);
             }
-            else if ( COMPARE_TO_VALUES[i] == ORIGINAL_BEFORE_TEST) {
+            else if ( COMPARE_TO_VALUES[i] == ORIGINAL_BEFORE_TEST) 
+            {
                 assertTrue("Expected and actual compareTo result (original exponent COMES BEFORE test exponent) DON'T match",
                         compareResult < 0);
-            } else {
+            } 
+            else 
+            {
                 assertTrue("Expected and actual compareTo result (original exponent COMES AFTER test exponent) DON'T match",
                         compareResult > 0);
             }
